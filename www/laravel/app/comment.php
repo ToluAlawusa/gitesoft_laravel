@@ -25,11 +25,13 @@ class Comment extends Model
      */
 
     public static function getCommentByID($id) {
-        $commentbyid = Comment::where('film_id', '=', $id)->first();
+        $commentbyid = Comment::where('film_id', '=', $id)
+        						->with('user', 'film')
+        						->get();
 
           if($commentbyid != null) {
 	        return $commentbyid;
-	        
+
 		      } else {
 		        return false;
 	      }
@@ -39,12 +41,12 @@ class Comment extends Model
     /**
      * the below-listed class defines relationships between tables.
      */
-    public function Film() {
+    public function film() {
        
         return $this->belongsTo('App\Film');
     }
 
-    public function User() {
+    public function user() {
        
         return $this->belongsTo('App\User');
     }

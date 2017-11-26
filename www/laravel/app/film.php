@@ -17,9 +17,15 @@ class Film extends Model
      */
 
     public static function getAllFilms() {
-        $films = Film::with('Rating', 'Genre')->paginate(1);
+        $films = Film::with('rating', 'genre')->paginate(1);
         
         return $films;
+    }
+
+    public static function getAllFilmsApi() {
+        $films = Film::with('rating', 'genre')->paginate(1);
+        
+        return response()->json($films);
     }
 
      /**
@@ -27,7 +33,9 @@ class Film extends Model
      */
 
     public static function getFilmByID($id) {
-        $filmbyid = Film::where('id', '=', $id)->first();
+        $filmbyid = Film::where('id', '=', $id)
+                        ->with('rating', 'genre')
+                        ->first();
         return $filmbyid;
     }
 
@@ -36,25 +44,35 @@ class Film extends Model
      */
 
     public static function getFilmByName($name) {
-        $filmbyname = Film::where('name', '=', $name)->first();
+        $filmbyname = Film::where('slug_name', '=', $name)
+                            ->with('rating', 'genre')
+                            ->first();
         return $filmbyname;
+    }
+
+    public static function getFilmByNameApi($name) {
+        $filmbyname = Film::where('slug_name', '=', $name)
+                            ->with('rating', 'genre')
+                            ->first();
+
+        return response()->json($filmbyname);
     }
 
 
     /**
      * the below-listed classes defines relationships between tables.
      */
-    public function Rating() {
+    public function rating() {
        
         return $this->belongsTo('App\Rating');
     }
     
-    public function Genre() {
+    public function genre() {
        
         return $this->belongsTo('App\Genre');
     }
 
-    public function Comment() {
+    public function comment() {
        
         return $this->hasMany('App\Comment');
     }

@@ -16,3 +16,14 @@ use Illuminate\Http\Request;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
+
+Route::group(['prefix' => '/v1'], function (){
+
+	/**
+     * this api endpoint prefixed with the group prefix above gets all films.
+     */
+	Route::get('/films', 'FilmController@showAllFilmsApi')
+	->middleware('api');
+
+
+});	
